@@ -13,6 +13,8 @@
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "asciify-image": "^0.1.10",
+    "canvas": "^3.2.0",
     "framer-motion": "^11.0.0",
     "leaflet": "^1.9.4",
     "next": "14.2.0",

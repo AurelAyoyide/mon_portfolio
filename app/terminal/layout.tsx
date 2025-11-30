@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Marjo Ballabani | Terminal Resume',
-  description: 'Interactive terminal-style resume of Marjo Ballabani - Senior Software Engineer',
+  title: 'Aurel AYOYIDE | AurelOS Terminal',
+  description: 'Portfolio interactif sous forme de terminal - Développeur Fullstack & Desktop',
 }
 
 export default function TerminalLayout({

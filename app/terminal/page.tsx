@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback, KeyboardEvent } from 'react'
 import Link from 'next/link'
 import Script from 'next/script'
+import { ASCII_AVATAR, ASCII_COLORS } from '../ascii-avatar'
 import './terminal.css'
 
 type Theme = 'default' | 'dracula' | 'solarized' | 'nord'
@@ -28,6 +29,10 @@ interface SplitContainer {
 }
 
 export default function TerminalPage() {
+  const [isBooting, setIsBooting] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isShuttingDown, setIsShuttingDown] = useState(false)
+  const [bootMessages, setBootMessages] = useState<string[]>([])
   const [theme, setTheme] = useState<Theme>('default')
   const [terminals, setTerminals] = useState<Map<string, TerminalInstance>>(
     new Map([['main', {
@@ -42,8 +47,6 @@ export default function TerminalPage() {
   const [activeTerminalId, setActiveTerminalId] = useState<string>('main')
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [showProjectsModal, setShowProjectsModal] = useState(false)
-  const [showSkillsModal, setShowSkillsModal] = useState(false)
-  const [showLanguageModal, setShowLanguageModal] = useState(false)
   const [gameActive, setGameActive] = useState(false)
   const [matrixActive, setMatrixActive] = useState(false)
   const [p5Loaded, setP5Loaded] = useState(false)
@@ -60,36 +63,55 @@ export default function TerminalPage() {
   const gameCanvasRef = useRef<HTMLCanvasElement>(null)
   const gameIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
+  const handleShutdown = () => {
+    setIsShuttingDown(true)
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 800)
+  }
+
   const projects = [
     {
-      title: "Interactive Terminal Resume",
-      description: "A unique terminal-based resume with interactive features",
-      image: "/image/terminal-project.png",
-      technologies: ["JavaScript", "HTML", "CSS"],
-      demo: "https://marjoballabani.me/terminal.html",
-      repo: "https://github.com/marjoballabani/mon_portfolio"
+      title: "Dashboard - Tableau de bord personnalisable",
+      description: "Plateforme complète de dashboards personnalisables avec widgets modulaires. Interface drag & drop, authentification JWT, API REST avec NestJS.",
+      image: "/image/dashboard-preview.png",
+      technologies: ["React", "NestJS", "MongoDB", "Tailwind CSS"],
+      demo: "https://showtime.agence-fastlane.com",
+      repo: "https://github.com/AurelAyoyide"
     },
-    // Add more projects as needed
+    {
+      title: "Pineapple - Critique de films",
+      description: "Plateforme de critiques cinématographiques avec intégration API TMDB. Server-Side Rendering avec Next.js pour performances optimales.",
+      image: "/image/pineapple-preview.png",
+      technologies: ["Next.js", "API TMDB", "Tailwind CSS", "TypeScript"],
+      demo: "https://pineapple2025.vercel.app/",
+      repo: "https://github.com/AurelAyoyide"
+    },
+    {
+      title: "AurelOS Portfolio - Terminal interactif",
+      description: "Portfolio personnel sous forme de terminal interactif avec boot sequence NASA/SpaceX, ASCII art coloré, effets glitch et shutdown CRT.",
+      image: "/image/aurelos-preview.png",
+      technologies: ["Next.js", "TypeScript", "CSS Animations", "ASCII Art"],
+      demo: "https://aurelayoyide.netlify.app/",
+      repo: "https://github.com/AurelAyoyide/mon_portfolio"
+    },
+    {
+      title: "YOWL - Plateforme communautaire",
+      description: "Réseau social permettant de centraliser et partager des commentaires sur tout type de contenu internet. Système de threading et votes.",
+      image: "/image/yowl-preview.png",
+      technologies: ["Laravel", "Vue.js", "Tailwind CSS", "MySQL"],
+      demo: "https://yowlraib.netlify.app/",
+      repo: "https://github.com/AurelAyoyide"
+    },
+    {
+      title: "Post-it - Gestionnaire de tâches",
+      description: "Application légère de gestion de tâches inspirée des Post-it physiques. Interface drag & drop intuitive avec catégorisation par couleurs.",
+      image: "/image/postit-preview.png",
+      technologies: ["Vue.js", "Tailwind CSS", "LocalStorage"],
+      demo: "https://apostit.netlify.app/",
+      repo: "https://github.com/AurelAyoyide"
+    },
   ]
-
-  const skillsData = {
-    programming: {
-      JavaScript: 95,
-      Python: 90,
-      "React.js": 85,
-      "Node.js": 88,
-    },
-    cloud: {
-      "Google Cloud": 92,
-      AWS: 85,
-      Azure: 80,
-    },
-    databases: {
-      MongoDB: 90,
-      PostgreSQL: 85,
-      Redis: 82,
-    },
-  }
 
   // Snake game state
   const snakeRef = useRef<{x: number, y: number}[]>([])
@@ -256,20 +278,21 @@ export default function TerminalPage() {
     }
   }
 
-  const getWelcomeMessage = useCallback(() => {
-    const asciiArt = `███╗   ███╗ █████╗ ██████╗ ██╗ ██████╗
-████╗ ████║██╔══██╗██╔══██╗██║██╔═══██╗
-██╔████╔██║███████║██████╔╝██║██║   ██║
-██║╚██╔╝██║██╔══██║██╔══██╗██║██║   ██║
-██║ ╚═╝ ██║██║  ██║██║  ██║██║╚██████╔╝
-╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝ ╚═════╝ `
+  // Logo AurelOS en ASCII art (utilisé dans boot et whoami)
+  const aurelosLogo = ` █████╗ ██╗   ██╗██████╗ ███████╗██╗      ██████╗ ███████╗
+██╔══██╗██║   ██║██╔══██╗██╔════╝██║     ██╔═══██╗██╔════╝
+███████║██║   ██║██████╔╝█████╗  ██║     ██║   ██║███████╗
+██╔══██║██║   ██║██╔══██╗██╔══╝  ██║     ██║   ██║╚════██║
+██║  ██║╚██████╔╝██║  ██║███████╗███████╗╚██████╔╝███████║
+╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝`
 
+  const getWelcomeMessage = useCallback(() => {
     const divider = '─────────────────────────────────────────────────'
 
-    return wrapWithColor(asciiArt + '\n', '#d4843e') +
+    return wrapWithColor(aurelosLogo + '\n', '#d4843e') +
       wrapWithColor(divider + '\n', '#555555') +
-      wrapWithColor('              Interactive Terminal Resume\n', '#888888') +
-      wrapWithColor('         Software Engineer • Cloud Architect • Tech Lead\n', '#666666') +
+      wrapWithColor('              AurelOS Terminal Environment\n', '#888888') +
+      wrapWithColor('         Développeur Fullstack & Desktop\n', '#666666') +
       wrapWithColor(divider + '\n\n', '#555555') +
       wrapWithColor("Type ", '#666666') +
       wrapWithColor("'help'", '#87af87') +
@@ -281,6 +304,69 @@ export default function TerminalPage() {
   }, [theme])
 
   useEffect(() => {
+    // Apply terminal-specific body styles
+    document.body.style.backgroundColor = '#000'
+    document.body.style.overflow = 'hidden'
+    document.body.style.margin = '0'
+    document.body.style.padding = '0'
+    document.body.style.minHeight = '100vh'
+
+    // Cleanup function to restore normal body styles
+    return () => {
+      document.body.style.backgroundColor = ''
+      document.body.style.overflow = ''
+      document.body.style.margin = ''
+      document.body.style.padding = ''
+      document.body.style.minHeight = ''
+    }
+  }, [])
+
+  useEffect(() => {
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    // Boot sequence
+    if (!isMobile) {
+      const messages = [
+        'AurelOS v1.0.0 Starting...',
+        '[OK] Loading kernel modules',
+        '[OK] Initializing system components',
+        '[OK] Mounting file system',
+        '[OK] Starting network services',
+        '[OK] Loading user environment',
+        '[OK] Terminal interface ready',
+        'Welcome to AurelOS'
+      ]
+
+      let messageIndex = 0
+      const bootInterval = setInterval(() => {
+        if (messageIndex < messages.length) {
+          setBootMessages(prev => [...prev, messages[messageIndex]])
+          messageIndex++
+        } else {
+          clearInterval(bootInterval)
+          setTimeout(() => setIsBooting(false), 100)
+        }
+      }, 100)
+
+      return () => {
+        clearInterval(bootInterval)
+        window.removeEventListener('resize', checkMobile)
+      }
+    } else {
+      setIsBooting(false)
+    }
+
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [isMobile])
+
+  useEffect(() => {
+    if (isBooting || isMobile) return
+
     // Load saved theme
     const savedTheme = localStorage.getItem('terminal-theme') as Theme
     if (savedTheme) setTheme(savedTheme)
@@ -300,7 +386,7 @@ export default function TerminalPage() {
       if (mainInput) mainInput.focus()
     }, 100)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isBooting, isMobile])
 
   useEffect(() => {
     // Global keyboard shortcuts for split
@@ -360,21 +446,22 @@ export default function TerminalPage() {
 
     const mainCommands = wrapWithColor('Main Commands:\n', '#00ffff') +
       wrapWithColor('• help', '#98fb98') + '       ' + wrapWithColor('Show this help message\n', '#ffffff') +
+      wrapWithColor('• whoami', '#98fb98') + '     ' + wrapWithColor('Display ASCII portrait\n', '#ffffff') +
       wrapWithColor('• about', '#98fb98') + '      ' + wrapWithColor('Display my professional summary\n', '#ffffff') +
       wrapWithColor('• skills', '#98fb98') + '     ' + wrapWithColor('View my technical expertise\n', '#ffffff') +
       wrapWithColor('• experience', '#98fb98') + ' ' + wrapWithColor('Show my work history\n', '#ffffff') +
       wrapWithColor('• education', '#98fb98') + '  ' + wrapWithColor('View my educational background\n', '#ffffff') +
       wrapWithColor('• contact', '#98fb98') + '    ' + wrapWithColor('Get my contact information\n', '#ffffff') +
+      wrapWithColor('• social', '#98fb98') + '     ' + wrapWithColor('Quick links to social media\n', '#ffffff') +
+      wrapWithColor('• cv', '#98fb98') + '         ' + wrapWithColor('Download my resume (PDF)\n', '#ffffff') +
       wrapWithColor('• clear', '#98fb98') + '      ' + wrapWithColor('Clear the terminal screen\n', '#ffffff')
 
     const utilityCommands = '\n' + wrapWithColor('Utility Commands:\n', '#00ffff') +
       wrapWithColor('• projects', '#98fb98') + '   ' + wrapWithColor('View my project showcase\n', '#ffffff') +
-      wrapWithColor('• skills-visual', '#98fb98') + ' ' + wrapWithColor('Show skills visualization\n', '#ffffff') +
       wrapWithColor('• game', '#98fb98') + '       ' + wrapWithColor('Play Snake mini-game\n', '#ffffff') +
       wrapWithColor('• exit-game', '#98fb98') + '  ' + wrapWithColor('Exit the game\n', '#ffffff') +
       wrapWithColor('• matrix', '#98fb98') + '     ' + wrapWithColor('Start Matrix digital rain effect\n', '#ffffff') +
       wrapWithColor('• stop-matrix', '#98fb98') + '' + wrapWithColor(' Stop Matrix effect\n', '#ffffff') +
-      wrapWithColor('• weather', '#98fb98') + '    ' + wrapWithColor('Check weather (usage: weather [city])\n', '#ffffff') +
       wrapWithColor('• calc', '#98fb98') + '       ' + wrapWithColor('Calculator (usage: calc [expression])\n', '#ffffff')
 
     const shortcuts = '\n' + wrapWithColor('Shortcuts:\n', '#666666') +
@@ -391,136 +478,242 @@ export default function TerminalPage() {
     const accent = themeColors[theme].accent
     return `<span style="color: ${accent}; font-weight: bold;">✨ About Me</span>
 
-${wrapWithColor('┌─────────────────────────────────────────────────────────┐', accent)}
-${wrapWithColor('│', accent)} ${wrapWithColor('Senior software engineer with more than 10 years of', '#ffffff')}
-${wrapWithColor('│', accent)} ${wrapWithColor('programming experience.', '#ffffff')}
-${wrapWithColor('└─────────────────────────────────────────────────────────┘', accent)}
+${wrapWithColor('┌───────────────────────────────────────────────────────────┐', accent)}
+${wrapWithColor('│', accent)} ${wrapWithColor('Développeur Fullstack & Desktop passionné depuis le lycée,', '#ffffff')}
+${wrapWithColor('│', accent)} ${wrapWithColor('je conçois des solutions web modernes et applications', '#ffffff')}
+${wrapWithColor('│', accent)} ${wrapWithColor('desktop performantes.', '#ffffff')}
+${wrapWithColor('└───────────────────────────────────────────────────────────┘', accent)}
 
-${wrapWithColor('⚡ Experience', accent)}
-${wrapWithColor('   Building scalable and efficient software solutions using', '#ffffff')}
-${wrapWithColor('   React, JavaScript, and Google Cloud', accent)}
+${wrapWithColor('⚡ Parcours', accent)}
+${wrapWithColor('   De la maintenance informatique à l’architecture logicielle', '#ffffff')}
+${wrapWithColor('   complexe, mon parcours m’a forgé une expertise technique', '#ffffff')}
+${wrapWithColor('   solide et une capacité d’adaptation constante.', '#ffffff')}
 
-${wrapWithColor('⚡ Passion', accent)}
-${wrapWithColor('   Transforming innovative ideas into high-quality applications', '#ffffff')}
-${wrapWithColor('   with elegant and efficient implementations', '#ffffff')}
+${wrapWithColor('⚡ Expertise', accent)}
+${wrapWithColor('   Maîtrise des technologies frontend/backend', '#ffffff')} ${wrapWithColor('(React, Next.js,', accent)}
+${wrapWithColor('   Vue.js, NestJS, Laravel)', accent)} ${wrapWithColor('et développement desktop', '#ffffff')} ${wrapWithColor('(C#,', accent)}
+${wrapWithColor('   VB.NET)', accent)} ${wrapWithColor('pour créer des expériences utilisateur', '#ffffff')}
+${wrapWithColor('   exceptionnelles.', '#ffffff')}
 
-${wrapWithColor('⚡ Strengths', accent)}
-${wrapWithColor('   Strong team player with expertise in designing robust,', '#ffffff')}
-${wrapWithColor('   high-performance systems', '#ffffff')}
+${wrapWithColor('⚡ Philosophie', accent)}
+${wrapWithColor('   Combinaison de créativité, rigueur technique et sens du', '#ffffff')}
+${wrapWithColor('   travail en équipe pour transformer des idées innovantes', '#ffffff')}
+${wrapWithColor('   en solutions performantes.', '#ffffff')}
 
 ${wrapWithColor('╭───────────────────────────────────────────────────────╮', accent)}
-${wrapWithColor('│', accent)} ${wrapWithColor('Ready to bring your innovative ideas to life!', '#ffffff')} ${wrapWithColor('│', accent)}
+${wrapWithColor('│', accent)} ${wrapWithColor('Prêt à relever de nouveaux défis techniques !', '#ffffff')}             ${wrapWithColor('│', accent)}
 ${wrapWithColor('╰───────────────────────────────────────────────────────╯', accent)}`
   }
 
-  const getSkillsText = () => {
-    return `<span style="color: #ffff00; font-weight: bold;">🛠️ PROGRAMMING</span>
+  const getWhoamiText = () => {
+    const accent = themeColors[theme].accent
+    
+    // AUREL en ASCII art
+    const aurelArt = [
+      ` █████╗ ██╗   ██╗██████╗ ███████╗██╗     `,
+      `██╔══██╗██║   ██║██╔══██╗██╔════╝██║     `,
+      `███████║██║   ██║██████╔╝█████╗  ██║     `,
+      `██╔══██║██║   ██║██╔══██╗██╔══╝  ██║     `,
+      `██║  ██║╚██████╔╝██║  ██║███████╗███████╗`,
+      `╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝`
+    ]
+    
+    // AYOYIDE en ASCII art
+    const ayoyideArt = [
+      ` █████╗ ██╗   ██╗ ██████╗ ██╗   ██╗██╗██████╗ ███████╗`,
+      `██╔══██╗╚██╗ ██╔╝██╔═══██╗╚██╗ ██╔╝██║██╔══██╗██╔════╝`,
+      `███████║ ╚████╔╝ ██║   ██║ ╚████╔╝ ██║██║  ██║█████╗  `,
+      `██╔══██║  ╚██╔╝  ██║   ██║  ╚██╔╝  ██║██║  ██║██╔══╝  `,
+      `██║  ██║   ██║   ╚██████╔╝   ██║   ██║██████╔╝███████╗`,
+      `╚═╝  ╚═╝   ╚═╝    ╚═════╝    ╚═╝   ╚═╝╚═════╝ ╚══════╝`
+    ]
+    
+    let output = `<span style="color: ${accent}; font-weight: bold;">👤 Who Am I</span>\n\n`
+    
+    // Afficher AUREL
+    aurelArt.forEach(line => {
+      output += wrapWithColor(line, accent) + '\n'
+    })
+    
+    output += '\n'
+    
+    // Afficher AYOYIDE
+    ayoyideArt.forEach(line => {
+      output += wrapWithColor(line, accent) + '\n'
+    })
+    
+    const divider = '─────────────────────────────────────────────────────────────'
+    
+    output += '\n' + wrapWithColor(divider, '#555555') + '\n'
+    output += wrapWithColor('💼 Développeur Fullstack & Desktop', '#ffffff') + '\n'
+    output += wrapWithColor('📍 Cotonou, Bénin', '#87cefa') + '\n'
+    output += wrapWithColor('📧 aurel.ayoyide@epitech.eu', '#98fb98') + '\n'
+    output += wrapWithColor('🌐 https://aurelayoyide.netlify.app/', '#87cefa') + '\n'
+    output += wrapWithColor(divider, '#555555')
+    
+    return output
+  }
 
-• <i class="fab fa-js" style="color: #f7df1e; margin-right: 8px;"></i> ${wrapWithColor('Typescript', '#ffffff')}
+  const getSkillsText = () => {
+    return `<span style="color: #ffff00; font-weight: bold;">🛠️ COMPÉTENCES TECHNIQUES</span>
+
+<span style="color: #00ffff;">💻 Langages de programmation</span>
+• <i class="fab fa-js" style="color: #f7df1e; margin-right: 8px;"></i> ${wrapWithColor('JavaScript', '#ffffff')}
+• <i class="fab fa-js" style="color: #3178c6; margin-right: 8px;"></i> ${wrapWithColor('TypeScript', '#ffffff')}
 • <i class="fab fa-python" style="color: #3776ab; margin-right: 8px;"></i> ${wrapWithColor('Python', '#ffffff')}
-• <i class="fab fa-js-square" style="color: #f7df1e; margin-right: 8px;"></i> ${wrapWithColor('Javascript', '#ffffff')}
-• <i class="fab fa-node" style="color: #339933; margin-right: 8px;"></i> ${wrapWithColor('Node', '#ffffff')}
-• <i class="fab fa-react" style="color: #61dafb; margin-right: 8px;"></i> ${wrapWithColor('React', '#ffffff')}
-• <i class="fab fa-angular" style="color: #dd0031; margin-right: 8px;"></i> ${wrapWithColor('Angular', '#ffffff')}
-• <i class="fab fa-google" style="color: #4285f4; margin-right: 8px;"></i> ${wrapWithColor('Google Cloud', '#ffffff')}
-• <i class="fab fa-aws" style="color: #ff9900; margin-right: 8px;"></i> ${wrapWithColor('AWS', '#ffffff')}
-• <i class="fab fa-microsoft" style="color: #00a4ef; margin-right: 8px;"></i> ${wrapWithColor('Azure', '#ffffff')}
-• <i class="fab fa-docker" style="color: #2496ed; margin-right: 8px;"></i> ${wrapWithColor('Docker', '#ffffff')}
-• <i class="fas fa-cubes" style="color: #7b42bc; margin-right: 8px;"></i> ${wrapWithColor('Terraform', '#ffffff')}
-• <i class="fas fa-dharmachakra" style="color: #326ce5; margin-right: 8px;"></i> ${wrapWithColor('Kubernetes', '#ffffff')}
 • <i class="fab fa-java" style="color: #f89820; margin-right: 8px;"></i> ${wrapWithColor('Java', '#ffffff')}
-• <i class="fas fa-code" style="color: #7f52ff; margin-right: 8px;"></i> ${wrapWithColor('Kotlin', '#ffffff')}
+• <i class="fab fa-php" style="color: #777bb4; margin-right: 8px;"></i> ${wrapWithColor('PHP', '#ffffff')}
+• <i class="fas fa-code" style="color: #68217a; margin-right: 8px;"></i> ${wrapWithColor('C#', '#ffffff')}
+• <i class="fas fa-code" style="color: #945db7; margin-right: 8px;"></i> ${wrapWithColor('VB.NET', '#ffffff')}
+• <i class="fab fa-html5" style="color: #e34f26; margin-right: 8px;"></i> ${wrapWithColor('HTML/CSS', '#ffffff')}
+
+<span style="color: #00ffff;">🎨 Frontend</span>
+• <i class="fab fa-react" style="color: #61dafb; margin-right: 8px;"></i> ${wrapWithColor('React.js', '#ffffff')}
+• <i class="fas fa-rocket" style="color: #000000; margin-right: 8px;"></i> ${wrapWithColor('Next.js', '#ffffff')}
+• <i class="fab fa-vuejs" style="color: #42b883; margin-right: 8px;"></i> ${wrapWithColor('Vue.js', '#ffffff')}
+• <i class="fab fa-react" style="color: #61dafb; margin-right: 8px;"></i> ${wrapWithColor('React Native', '#ffffff')}
+• <i class="fas fa-wind" style="color: #38bdf8; margin-right: 8px;"></i> ${wrapWithColor('Tailwind CSS', '#ffffff')}
+• <i class="fab fa-bootstrap" style="color: #7952b3; margin-right: 8px;"></i> ${wrapWithColor('Bootstrap', '#ffffff')}
+• <i class="fas fa-store" style="color: #42b883; margin-right: 8px;"></i> ${wrapWithColor('Pinia', '#ffffff')}
+
+<span style="color: #00ffff;">⚙️ Backend</span>
+• <i class="fab fa-node" style="color: #339933; margin-right: 8px;"></i> ${wrapWithColor('Node.js', '#ffffff')}
+• <i class="fas fa-server" style="color: #68a063; margin-right: 8px;"></i> ${wrapWithColor('Express.js', '#ffffff')}
+• <i class="fas fa-cat" style="color: #e0234e; margin-right: 8px;"></i> ${wrapWithColor('NestJS', '#ffffff')}
+• <i class="fab fa-laravel" style="color: #ff2d20; margin-right: 8px;"></i> ${wrapWithColor('Laravel', '#ffffff')}
+• <i class="fas fa-flask" style="color: #000000; margin-right: 8px;"></i> ${wrapWithColor('Flask', '#ffffff')}
+
+<span style="color: #00ffff;">🗄️ Bases de données</span>
 • <i class="fas fa-leaf" style="color: #47a248; margin-right: 8px;"></i> ${wrapWithColor('MongoDB', '#ffffff')}
-• <i class="fas fa-database" style="color: #4db33d; margin-right: 8px;"></i> ${wrapWithColor('RethinkDB', '#ffffff')}
-• <i class="fas fa-vial" style="color: #c21325; margin-right: 8px;"></i> ${wrapWithColor('Jest', '#ffffff')}
-• <i class="fas fa-search" style="color: #00bfb3; margin-right: 8px;"></i> ${wrapWithColor('ElasticSearch', '#ffffff')}
-• <i class="fas fa-project-diagram" style="color: #e10098; margin-right: 8px;"></i> ${wrapWithColor('GraphQL', '#ffffff')}
-• <i class="fas fa-server" style="color: #68a063; margin-right: 8px;"></i> ${wrapWithColor('Express', '#ffffff')}
-• <i class="fas fa-database" style="color: #dc382d; margin-right: 8px;"></i> ${wrapWithColor('Redis', '#ffffff')}
-• <i class="fas fa-database" style="color: #00758f; margin-right: 8px;"></i> ${wrapWithColor('SQL', '#ffffff')}
-• <i class="fab fa-html5" style="color: #e34f26; margin-right: 8px;"></i> ${wrapWithColor('HTML', '#ffffff')}
-• <i class="fab fa-css3-alt" style="color: #1572b6; margin-right: 8px;"></i> ${wrapWithColor('CSS', '#ffffff')}`
+• <i class="fas fa-database" style="color: #00758f; margin-right: 8px;"></i> ${wrapWithColor('MySQL', '#ffffff')}
+• <i class="fas fa-database" style="color: #336791; margin-right: 8px;"></i> ${wrapWithColor('PostgreSQL', '#ffffff')}
+• <i class="fas fa-database" style="color: #003b57; margin-right: 8px;"></i> ${wrapWithColor('SQLite', '#ffffff')}
+• <i class="fab fa-google" style="color: #ffca28; margin-right: 8px;"></i> ${wrapWithColor('Firebase', '#ffffff')}
+
+<span style="color: #00ffff;">☁️ DevOps & Cloud</span>
+• <i class="fab fa-docker" style="color: #2496ed; margin-right: 8px;"></i> ${wrapWithColor('Docker', '#ffffff')}
+• <i class="fab fa-git-alt" style="color: #f05032; margin-right: 8px;"></i> ${wrapWithColor('Git', '#ffffff')}
+• <i class="fab fa-github" style="color: #181717; margin-right: 8px;"></i> ${wrapWithColor('GitHub Actions', '#ffffff')}
+• <i class="fas fa-cloud" style="color: #000000; margin-right: 8px;"></i> ${wrapWithColor('Vercel', '#ffffff')}
+• <i class="fas fa-cloud" style="color: #00c7b7; margin-right: 8px;"></i> ${wrapWithColor('Netlify', '#ffffff')}
+
+<span style="color: #00ffff;">🛠️ Outils & Autres</span>
+• <i class="fas fa-rocket" style="color: #ff6c37; margin-right: 8px;"></i> ${wrapWithColor('Postman (Certifié)', '#ffffff')}
+• <i class="fas fa-exchange-alt" style="color: #61dafb; margin-right: 8px;"></i> ${wrapWithColor('REST API', '#ffffff')}
+• <i class="fas fa-key" style="color: #000000; margin-right: 8px;"></i> ${wrapWithColor('JWT', '#ffffff')}
+• <i class="fas fa-code" style="color: #007acc; margin-right: 8px;"></i> ${wrapWithColor('Visual Studio Code', '#ffffff')}
+• <i class="fas fa-code" style="color: #68217a; margin-right: 8px;"></i> ${wrapWithColor('Visual Studio', '#ffffff')}
+• <i class="fab fa-figma" style="color: #f24e1e; margin-right: 8px;"></i> ${wrapWithColor('Figma', '#ffffff')}`
   }
 
   const getExperienceText = () => {
-    return `<span style="color: #ffff00; font-weight: bold;">💼 Professional Experience</span>
+    return `<span style="color: #ffff00; font-weight: bold;">💼 Expérience Professionnelle</span>
 
-<span style="color: #00ffff;">UNICEPTA | Senior Software Engineer</span>
-${wrapWithColor('Jul 2020 - Present | Cologne, Germany | 450+ employees', '#ffffff')}
-${wrapWithColor('Visionary, AI-powered Media & Data Intelligence Solutions', '#98fb98')}
+<span style="color: #00ffff;">EPITECH Bénin | Étudiant Développeur Fullstack</span>
+${wrapWithColor('Juillet 2025 - Décembre 2025 | Cotonou, Bénin', '#ffffff')}
+${wrapWithColor('Coding Academy - Formation intensive aux technologies modernes', '#98fb98')}
 
-• ${wrapWithColor('Part of Core team', '#ffa07a')} - ${wrapWithColor('Architect and part of every decision.', '#ffffff')}
-• ${wrapWithColor('Microservices engineer', '#ffa07a')} - ${wrapWithColor('Designed and build services for distributed system', '#ffffff')}
-• ${wrapWithColor('Pipeline engineer', '#ffa07a')} - ${wrapWithColor('Google cloud engineer for data pipeline', '#ffffff')}
-• ${wrapWithColor('Fullstack engineer', '#ffa07a')} - ${wrapWithColor('Wrote and reviewed code for front/back/cloud.', '#ffffff')}
+• ${wrapWithColor('Développement d’applications web modernes', '#ffa07a')} - ${wrapWithColor('React, Next.js, Vue.js, NestJS', '#ffffff')}
+• ${wrapWithColor('Architecture Fullstack complète', '#ffa07a')} - ${wrapWithColor('De la base de données au frontend', '#ffffff')}
+• ${wrapWithColor('Collaboration en équipe', '#ffa07a')} - ${wrapWithColor('Git et méthodologies agiles', '#ffffff')}
+• ${wrapWithColor('Maîtrise des API REST', '#ffa07a')} - ${wrapWithColor('Intégration de services tiers', '#ffffff')}
+• ${wrapWithColor('Déploiement cloud', '#ffa07a')} - ${wrapWithColor('Vercel, Netlify et gestion d’applications', '#ffffff')}
 
-${wrapWithColor('Technologies used:', '#00ffff')} ${wrapWithColor('Typescript, React, NodeJs, Poetry, PyTest, ReactJS, Jest, Cypress, ES6, ElasticSearch, Google Cloud, JIRA, Firebase, Kubernetes, Data Flow', '#87cefa')}
-
-<span style="color: #00ffff;">RITECH SOLUTIONS | Senior Software Engineer</span>
-${wrapWithColor('Jul 2018 – Jul 2020 | Tirana, Albania | 100-150 employees', '#ffffff')}
-
-• ${wrapWithColor('Part of Core team', '#ffa07a')} - ${wrapWithColor('Team that leads company tech decisions', '#ffffff')}
-• ${wrapWithColor('Tech interviewer', '#ffa07a')} - ${wrapWithColor('Interview potential candidates.', '#ffffff')}
-• ${wrapWithColor('Microsoft project', '#ffa07a')} - ${wrapWithColor('IOT marketing project in every Microsoft store.', '#ffffff')}
-• ${wrapWithColor('AppriseMobile Tech Lead', '#ffa07a')} - ${wrapWithColor('CRM for Toyota and corporates in USA', '#ffffff')}
-
-${wrapWithColor('Technologies used:', '#00ffff')} ${wrapWithColor('JavaScript, Python, pandas, NodeJs, ReactJS, Chai, Sinon, Mocha, ES6, ElasticSearch, Redis, Nginx, Gulp, JIRA, Docker, Azure, AWS, MongoDB', '#87cefa')}
-
-<span style="color: #00ffff;">GUTENBERG TECHNOLOGY | Software Engineering</span>
-${wrapWithColor('Feb 2017 – Aug 2018 | Paris, France | 50-100 employees', '#ffffff')}
-
-• ${wrapWithColor('Fullstack developer', '#ffa07a')} - ${wrapWithColor('Frontend and backend (real-time publisher platform) used by National Geographics, IUBH, Fujitsu', '#ffffff')}
-• ${wrapWithColor('MEFIO developer', '#ffa07a')} - ${wrapWithColor('Highly available publisher platform', '#ffffff')}
-• ${wrapWithColor('SaaS developer', '#ffa07a')} - ${wrapWithColor('Integrated strategy to migrate from manual sales to SaaS', '#ffffff')}
-
-${wrapWithColor('Technologies used:', '#00ffff')} ${wrapWithColor('Python, ES6, ElasticSearch, Redis, Nginx, npm, Gulp, JIRA, Docker, AWS S3, RethinkDB, ReactJS, NodeJS, AngularJS, JavaScript', '#87cefa')}
-
-<span style="color: #00ffff;">GROUP OF COMPANIES | Software Engineer</span>
-${wrapWithColor('Mar 2015 – Feb 2017 | Tirana, Albania | 5-30 employees', '#ffffff')}
-
-• ${wrapWithColor('Software developer', '#ffa07a')} - ${wrapWithColor('Developed web and native projects', '#ffffff')}
-• ${wrapWithColor('Bar management app', '#ffa07a')} - ${wrapWithColor('Developed app for bar/restaurant management.', '#ffffff')}
-• ${wrapWithColor('Bank system optimisation', '#ffa07a')} - ${wrapWithColor('Optimised aggregation from 11h to 1h', '#ffffff')}
-
-${wrapWithColor('Technologies used:', '#00ffff')} ${wrapWithColor('Typescript, Python, Gulp, Docker, MongoDB, ReactJS, NodeJs, AngularJS, JavaScript, Java', '#87cefa')}`
+${wrapWithColor('Technologies utilisées:', '#00ffff')} ${wrapWithColor('Next.js, React, Vue.js, NestJS, Laravel, MongoDB, MySQL, Tailwind CSS, Git, Postman', '#87cefa')}`
   }
 
   const getEducationText = () => {
     const accent = themeColors[theme].accent
-    return `<span style="color: ${accent}; font-weight: bold;">🎓 Education</span>
+    return `<span style="color: ${accent}; font-weight: bold;">🎓 Formation</span>
 
 ${wrapWithColor('┌──────────────────────────────────────────────────┐', accent)}
-${wrapWithColor('│', accent)}${wrapWithColor(' Bachelor of Computer Science ', '#ffffff')}${wrapWithColor('│', accent)}
+${wrapWithColor('│', accent)}${wrapWithColor(' Coding Academy - Développement Fullstack ', '#ffffff')}${wrapWithColor('│', accent)}
 ${wrapWithColor('└──────────────────────────────────────────────────┘', accent)}
 
-${wrapWithColor('🏛️ Institution:', accent)} ${wrapWithColor('University of Tirana', '#ffffff')}
-${wrapWithColor('📅 Duration:', accent)}    ${wrapWithColor('2013 - 2016', '#ffffff')}
-${wrapWithColor('📍 Location:', accent)}    ${wrapWithColor('Tirana, Albania', '#ffffff')}
+${wrapWithColor('🏛️ Institution:', accent)} ${wrapWithColor('EPITECH Bénin', '#ffffff')}
+${wrapWithColor('📅 Période:', accent)}    ${wrapWithColor('Juillet 2025 - Présent', '#ffffff')}
+${wrapWithColor('📍 Lieu:', accent)}        ${wrapWithColor('Cotonou, Bénin', '#ffffff')}
+${wrapWithColor('🎯 Focus:', accent)}       ${wrapWithColor('Technologies web modernes, Architecture logicielle', '#ffffff')}
+
+${wrapWithColor('┌──────────────────────────────────────────────────┐', accent)}
+${wrapWithColor('│', accent)}${wrapWithColor(' Licence Pro - Systèmes Informatiques ', '#ffffff')}         ${wrapWithColor('│', accent)}
+${wrapWithColor('└──────────────────────────────────────────────────┘', accent)}
+
+${wrapWithColor('🏛️ Institution:', accent)} ${wrapWithColor('Institut Universitaire Les Cours Sonou', '#ffffff')}
+${wrapWithColor('📅 Période:', accent)}    ${wrapWithColor('Novembre 2019 - 2024', '#ffffff')}
+${wrapWithColor('📍 Lieu:', accent)}        ${wrapWithColor('Cotonou, Bénin', '#ffffff')}
+
+${wrapWithColor('┌──────────────────────────────────────────────────┐', accent)}
+${wrapWithColor('│', accent)}${wrapWithColor(' Diplôme de Technicien - Maintenance Info ', '#ffffff')}      ${wrapWithColor('│', accent)}
+${wrapWithColor('└──────────────────────────────────────────────────┘', accent)}
+
+${wrapWithColor('🏛️ Institution:', accent)} ${wrapWithColor('Lycée Technique et Professionnel de Kpondehou', '#ffffff')}
+${wrapWithColor('📅 Période:', accent)}    ${wrapWithColor('2015 - 2018', '#ffffff')}
+${wrapWithColor('📍 Lieu:', accent)}        ${wrapWithColor('Cotonou, Bénin', '#ffffff')}
 
 ${wrapWithColor('╭──────────────────────────────────────────────────╮', accent)}
-${wrapWithColor('│', accent)}${wrapWithColor(' Foundation of my software engineering journey ', '#ffffff')}${wrapWithColor('│', accent)}
+${wrapWithColor('│', accent)}${wrapWithColor(' De la maintenance à l’architecture logicielle ', '#ffffff')}     ${wrapWithColor('│', accent)}
 ${wrapWithColor('╰──────────────────────────────────────────────────╯', accent)}`
   }
 
   const getContactText = () => {
     const accent = themeColors[theme].accent
-    return `<span style="color: ${accent}; font-weight: bold;">📫 Contact Information</span>
+    return `<span style="color: ${accent}; font-weight: bold;">📫 Contact</span>
 
 ${wrapWithColor('┌────────────────────────────────────────┐', accent)}
-${wrapWithColor('│', accent)} ${wrapWithColor("Let's connect and create something great!", '#ffffff')} ${wrapWithColor('│', accent)}
+${wrapWithColor('│', accent)} ${wrapWithColor('Connectons-nous et créons quelque chose !', '#ffffff')} ${wrapWithColor('│', accent)}
 ${wrapWithColor('└────────────────────────────────────────┘', accent)}
 
-${wrapWithColor('✉', accent)}  ${wrapWithColor('Email:', accent)} ${wrapWithColor('<a href="mailto:marjoballabani@gmail.com" style="color: #ffffff; text-decoration: none;">marjoballabani@gmail.com</a>', '#ffffff')}
+${wrapWithColor('✉', accent)}  ${wrapWithColor('Email:', accent)} ${wrapWithColor('<a href="mailto:aurel.ayoyide@epitech.eu" style="color: #ffffff; text-decoration: none;">aurel.ayoyide@epitech.eu</a>', '#ffffff')}
 
-${wrapWithColor('🌐', accent)}  ${wrapWithColor('Website:', accent)} ${wrapWithColor('<a href="https://marjoballabani.me" target="_blank" style="color: #ffffff; text-decoration: none;">marjoballabani.me</a>', '#ffffff')}
+${wrapWithColor('📞', accent)}  ${wrapWithColor('Téléphone:', accent)} ${wrapWithColor('+229 01 96 81 18 59', '#ffffff')}
 
-${wrapWithColor('⚡', accent)}  ${wrapWithColor('Github:', accent)} ${wrapWithColor('<a href="https://github.com/marjoballabani" target="_blank" style="color: #ffffff; text-decoration: none;">github.com/marjoballabani</a>', '#ffffff')}
+${wrapWithColor('🌐', accent)}  ${wrapWithColor('Site web:', accent)} ${wrapWithColor('<a href="https://aurelayoyide.netlify.app/" target="_blank" style="color: #ffffff; text-decoration: none;">aurelayoyide.netlify.app</a>', '#ffffff')}
 
-${wrapWithColor('💼', accent)}  ${wrapWithColor('LinkedIn:', accent)} ${wrapWithColor('<a href="https://linkedin.com/in/marjo-ballabani" target="_blank" style="color: #ffffff; text-decoration: none;">linkedin.com/in/marjo-ballabani</a>', '#ffffff')}
+${wrapWithColor('⚡', accent)}  ${wrapWithColor('Github:', accent)} ${wrapWithColor('<a href="https://github.com/AurelAyoyide" target="_blank" style="color: #ffffff; text-decoration: none;">github.com/AurelAyoyide</a>', '#ffffff')}
+
+${wrapWithColor('💼', accent)}  ${wrapWithColor('LinkedIn:', accent)} ${wrapWithColor('<a href="https://linkedin.com/in/aurel-ayoyide-864863396" target="_blank" style="color: #ffffff; text-decoration: none;">linkedin.com/in/aurel-ayoyide</a>', '#ffffff')}
+
+${wrapWithColor('📍', accent)}  ${wrapWithColor('Localisation:', accent)} ${wrapWithColor('Cotonou, Bénin', '#ffffff')}
 
 ${wrapWithColor('╭────────────────────────────────────────╮', accent)}
-${wrapWithColor('│', accent)} ${wrapWithColor('Feel free to reach out for opportunities!', '#ffffff')} ${wrapWithColor('│', accent)}
+${wrapWithColor('│', accent)} ${wrapWithColor('Disponible pour nouvelles opportunités !', '#ffffff')} ${wrapWithColor('│', accent)}
 ${wrapWithColor('╰────────────────────────────────────────╯', accent)}`
+  }
+
+  const getSocialText = () => {
+    const accent = themeColors[theme].accent
+    return `<span style="color: ${accent}; font-weight: bold;">🔗 LIENS RAPIDES</span>
+
+${wrapWithColor('┌──────────────────────────────────────────────────┐', '#555555')}
+${wrapWithColor('│', '#555555')} <i class="fab fa-github" style="color: #ffffff; font-size: 1.2em; margin-right: 8px;"></i> ${wrapWithColor('GitHub', '#87cefa')}                                     ${wrapWithColor('│', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('<a href="https://github.com/AurelAyoyide" target="_blank" style="color: #98fb98; text-decoration: none;">https://github.com/AurelAyoyide</a>', '#98fb98')}            ${wrapWithColor('│', '#555555')}
+${wrapWithColor('├──────────────────────────────────────────────────┤', '#555555')}
+${wrapWithColor('│', '#555555')} <i class="fab fa-linkedin" style="color: #0077b5; font-size: 1.2em; margin-right: 8px;"></i> ${wrapWithColor('LinkedIn', '#87cefa')}                                 ${wrapWithColor('│', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('<a href="https://linkedin.com/in/aurel-ayoyide-864863396/" target="_blank" style="color: #98fb98; text-decoration: none;">linkedin.com/in/aurel-ayoyide-864863396/</a>', '#98fb98')} ${wrapWithColor('│', '#555555')}
+${wrapWithColor('├──────────────────────────────────────────────────┤', '#555555')}
+${wrapWithColor('│', '#555555')} <i class="fas fa-globe" style="color: #ffd93d; font-size: 1.2em; margin-right: 8px;"></i> ${wrapWithColor('Portfolio', '#87cefa')}                               ${wrapWithColor('│', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('<a href="https://aurelayoyide.netlify.app/" target="_blank" style="color: #98fb98; text-decoration: none;">https://aurelayoyide.netlify.app/</a>', '#98fb98')}          ${wrapWithColor('│', '#555555')}
+${wrapWithColor('└──────────────────────────────────────────────────┘', '#555555')}
+
+${wrapWithColor('💡 Tip:', accent)} Cliquez sur les liens pour les ouvrir !`
+  }
+
+  const getCvText = () => {
+    const accent = themeColors[theme].accent
+    return `<span style="color: ${accent}; font-weight: bold;">📄 CURRICULUM VITAE</span>
+
+${wrapWithColor('┌───────────────────────────────────────────────┐', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('📥 Télécharger mon CV', '#87cefa')}                        ${wrapWithColor('│', '#555555')}
+${wrapWithColor('├───────────────────────────────────────────────┤', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('Format:', '#87cefa')} ${wrapWithColor('PDF', '#98fb98')}                                    ${wrapWithColor('│', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('Taille:', '#87cefa')} ${wrapWithColor('~ 150 KB', '#98fb98')}                              ${wrapWithColor('│', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('Langue:', '#87cefa')} ${wrapWithColor('Français', '#98fb98')}                             ${wrapWithColor('│', '#555555')}
+${wrapWithColor('├───────────────────────────────────────────────┤', '#555555')}
+${wrapWithColor('│', '#555555')} ${wrapWithColor('<a href="/Aurel_AYOYIDE_Developpeur_full_stack.pdf" download style="color: #98fb98; text-decoration: underline;">👉 Cliquez ici pour télécharger</a>', '#98fb98')}                 ${wrapWithColor('│', '#555555')}
+${wrapWithColor('└───────────────────────────────────────────────┘', '#555555')}
+
+${wrapWithColor('💡 Tip:', accent)} Le CV sera téléchargé au format PDF`
   }
 
   // Matrix Effect
@@ -836,49 +1029,6 @@ ${wrapWithColor('╰────────────────────
   }, [gameActive, endGame])
 
   // Weather command
-  const showWeather = async (location: string, terminalId: string) => {
-    if (!location) {
-      addOutput(terminalId, "Please specify a location. Usage: weather [city name]", 'error')
-      return
-    }
-
-    addOutput(terminalId, `Fetching weather for ${location}...`, 'info')
-
-    try {
-      const apiKey = '4331a27995f4c5b5e8d1eab1ed3d88b4'
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(location)}&appid=${apiKey}&units=metric`
-
-      const response = await fetch(url)
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`)
-      }
-
-      const data = await response.json()
-
-      const weatherHTML = `<div class="weather-container">
-        <div class="weather-header">
-          <span style="color: #ffff00; font-weight: bold;">🌤️ Weather for ${data.name}, ${data.sys.country}</span>
-        </div>
-        <div class="weather-body">
-          <div class="weather-main">
-            <span style="font-size: 2rem; color: #ffffff;">${Math.round(data.main.temp)}°C</span>
-            <span style="color: #cccccc;">${data.weather[0].main}</span>
-          </div>
-          <div class="weather-details">
-            <div><span style="color: #87cefa;">Feels like:</span> ${Math.round(data.main.feels_like)}°C</div>
-            <div><span style="color: #87cefa;">Humidity:</span> ${data.main.humidity}%</div>
-            <div><span style="color: #87cefa;">Wind:</span> ${Math.round(data.wind.speed * 3.6)} km/h</div>
-          </div>
-        </div>
-      </div>`
-
-      addOutput(terminalId, weatherHTML)
-    } catch {
-      addOutput(terminalId, `Failed to fetch weather data. Please check the city name.`, 'error')
-    }
-  }
-
   // Calculator command
   const calculate = (expression: string, terminalId: string) => {
     if (!expression) {
@@ -932,6 +1082,9 @@ ${wrapWithColor('╰────────────────────
       case 'help':
         addOutput(terminalId, getHelpText())
         break
+      case 'whoami':
+        addOutput(terminalId, getWhoamiText())
+        break
       case 'about':
         addOutput(terminalId, getAboutText())
         break
@@ -947,14 +1100,18 @@ ${wrapWithColor('╰────────────────────
       case 'contact':
         addOutput(terminalId, getContactText())
         break
+      case 'social':
+        addOutput(terminalId, getSocialText())
+        break
+      case 'cv':
+      case 'resume':
+        addOutput(terminalId, getCvText())
+        break
       case 'clear':
         clearTerminalOutput(terminalId)
         break
       case 'projects':
         setShowProjectsModal(true)
-        break
-      case 'skills-visual':
-        setShowSkillsModal(true)
         break
       case 'game':
         initSnakeGame(terminalId)
@@ -968,9 +1125,6 @@ ${wrapWithColor('╰────────────────────
       case 'stop-matrix':
         stopMatrix()
         addOutput(terminalId, 'Matrix effect stopped.', 'info')
-        break
-      case 'weather':
-        showWeather(args.join(' '), terminalId)
         break
       case 'calc':
       case 'calculate':
@@ -990,7 +1144,7 @@ ${wrapWithColor('╰────────────────────
     if (!terminal) return
 
     const currentInput = terminal.input.toLowerCase().trim()
-    const commands = ['help', 'about', 'skills', 'experience', 'education', 'contact', 'clear', 'projects', 'skills-visual', 'game', 'exit-game', 'matrix', 'stop-matrix', 'weather', 'calc']
+    const commands = ['help', 'whoami', 'about', 'skills', 'experience', 'education', 'contact', 'social', 'cv', 'resume', 'clear', 'projects', 'game', 'exit-game', 'matrix', 'stop-matrix', 'calc']
 
     const matches = commands.filter(cmd => cmd.startsWith(currentInput))
 
@@ -1150,22 +1304,85 @@ ${wrapWithColor('╰────────────────────
       />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       
-      <div className={`terminal-page theme-${theme}`}>
-        <div className="terminal">
+      {/* Mobile Warning */}
+      {isMobile && (
+        <div className="mobile-warning">
+          <div className="mobile-warning-content">
+            <i className="fa-solid fa-desktop" style={{ fontSize: '3rem', marginBottom: '1rem' }}></i>
+            <h1>AurelOS</h1>
+            <p>Cette section est optimisée pour ordinateur.</p>
+            <p>Veuillez utiliser un ordinateur pour accéder à AurelOS mon terminal interactif.</p>
+            <Link href="/" className="back-button">
+              <i className="fa-solid fa-arrow-left"></i> Retour à l&apos;accueil
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Boot Sequence */}
+      {!isMobile && isBooting && (
+        <div className="boot-screen">
+          <div className="boot-content">
+            <div className="boot-ascii-art">
+              {ASCII_AVATAR.split('\n').map((line, lineIndex) => (
+                <div 
+                  key={lineIndex} 
+                  style={{ 
+                    display: 'flex', 
+                    height: '1em', 
+                    lineHeight: '1em',
+                    animation: `asciiLineAppear 0.01s ease-out ${lineIndex * 0.003}s both`
+                  }}
+                >
+                  {line.split('').map((char, charIndex) => {
+                    const color = ASCII_COLORS[lineIndex]?.[charIndex] || '#ffd93d';
+                    return (
+                      <span
+                        key={charIndex}
+                        style={{
+                          color: color,
+                          textShadow: `0 0 10px ${color}40`,
+                          width: '0.6em',
+                          display: 'inline-block',
+                          fontFamily: 'monospace',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        {char}
+                      </span>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+            <div className="boot-logo glitch-text" data-text="AurelOS">AurelOS</div>
+            <div className="boot-version">Version 1.0.0</div>
+            <div className="boot-messages">
+              {bootMessages.map((msg, i) => (
+                <div key={i} className="boot-message">
+                  {msg}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Terminal */}
+      {!isMobile && !isBooting && (
+        <div className={`terminal-page theme-${theme} ${isShuttingDown ? 'shutdown' : ''}`}>
+          <div className="terminal">
           {/* Header */}
           <div className="terminal-header">
             <div className="terminal-buttons">
-              <span className="close"></span>
+              <span className="close" onClick={handleShutdown}></span>
               <span className="minimize"></span>
               <span className="maximize"></span>
             </div>
-            <div className="terminal-title">marjo@ballabani: ~/resume</div>
+            <div className="terminal-title">aurel@aurelos: ~/terminal</div>
             <div className="terminal-controls">
               <div className="theme-selector" onClick={() => setShowThemeModal(true)}>
                 <i className="fa-solid fa-palette" id="theme-toggle"></i>
-              </div>
-              <div className="language-selector" style={{ display: 'none' }} onClick={() => setShowLanguageModal(true)}>
-                <i className="fa-solid fa-globe" id="language-toggle"></i>
               </div>
             </div>
           </div>
@@ -1249,20 +1466,6 @@ ${wrapWithColor('╰────────────────────
           </div>
         </div>
 
-        {/* Language Modal */}
-        <div className={`modal ${showLanguageModal ? 'active' : ''}`} onClick={() => setShowLanguageModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-button" onClick={() => setShowLanguageModal(false)}>&times;</span>
-            <h2>Select Language</h2>
-            <div className="language-options">
-              <div className="language-option" data-lang="en">English</div>
-              <div className="language-option" data-lang="de">Deutsch</div>
-              <div className="language-option" data-lang="fr">Français</div>
-              <div className="language-option" data-lang="sq">Albanian</div>
-            </div>
-          </div>
-        </div>
-
         {/* Projects Modal */}
         <div className={`modal ${showProjectsModal ? 'active' : ''}`} onClick={() => setShowProjectsModal(false)}>
           <div className="modal-content projects-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -1271,7 +1474,18 @@ ${wrapWithColor('╰────────────────────
             <div className="projects-container">
               {projects.map((project, index) => (
                 <div key={index} className="project-card">
-                  <img src={project.image} alt={project.title} className="project-image" />
+                  {project.demo !== "#" ? (
+                    <iframe 
+                      src={project.demo} 
+                      className="project-iframe" 
+                      title={project.title}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="project-placeholder">
+                      <p>Preview not available</p>
+                    </div>
+                  )}
                   <div className="project-details">
                     <h3 className="project-title">{project.title}</h3>
                     <p className="project-description">{project.description}</p>
@@ -1294,35 +1508,8 @@ ${wrapWithColor('╰────────────────────
             </div>
           </div>
         </div>
-
-        {/* Skills Modal */}
-        <div className={`modal ${showSkillsModal ? 'active' : ''}`} onClick={() => setShowSkillsModal(false)}>
-          <div className="modal-content skills-modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-button" onClick={() => setShowSkillsModal(false)}>&times;</span>
-            <h2>Skills Visualization</h2>
-            <div className="skills-container">
-              {Object.entries(skillsData).map(([category, skills]) => (
-                <div key={category} className="skill-category">
-                  <h3 className="skill-category-title">{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
-                  <div className="skill-bars">
-                    {Object.entries(skills).map(([skill, level]) => (
-                      <div key={skill} className="skill-item">
-                        <div className="skill-info">
-                          <span className="skill-name">{skill}</span>
-                          <span className="skill-level">{level}%</span>
-                        </div>
-                        <div className="skill-progress">
-                          <div className="skill-progress-bar" style={{ width: `${level}%` }}></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
+      )}
     </>
   )
 }
