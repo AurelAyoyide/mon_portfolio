@@ -714,7 +714,7 @@ export default function Home() {
                 <div className="tape-sticker"></div>
                 <Image 
                   ref={heroPhotoRef as any}
-                  src="/image/avatar-gpt.png" 
+                  src="/image/aurelGawx.png" 
                   alt="Aurel AYOYIDE" 
                   className={`hero-photo ${photoTilted ? 'tilted' : ''}`}
                   width={400} 
@@ -893,7 +893,7 @@ export default function Home() {
                   <rect width="100%" height="100%" fill="url(#grid)"/>
                   <rect width="100%" height="100%" fill="url(#scratches)"/>
                 </svg>
-                <Image src="/image/pirat.png" alt="Pirate" className="map-pirate-overlay" width={200} height={200} />
+                <Image src="/image/pirate.png" alt="Pirate" className="map-pirate-overlay" width={200} height={200} />
               </div>
             </div>
           </section>
