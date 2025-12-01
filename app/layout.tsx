@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: 'Développeur passionné spécialisé en développement web moderne et applications desktop. Expert React, Next.js, Vue.js, C# et VB.NET.',
     images: [
       {
-        url: '/image/social-cover.png',
+        url: '/image/aurelGawx.png',
         width: 1200,
         height: 630,
         alt: 'Aurel AYOYIDE - Développeur Fullstack & Desktop',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Aurel AYOYIDE | Développeur Fullstack & Desktop',
     description: 'Développeur passionné spécialisé en développement web moderne et applications desktop. Expert React, Next.js, Vue.js, C# et VB.NET.',
-    images: ['/image/social-cover.png'],
+    images: ['/image/aurelGawx.png'],
   },
   robots: 'index, follow',
 }
