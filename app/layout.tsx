@@ -52,7 +52,7 @@ export default function RootLayout({
       </head>
       <body style={{ fontFamily: "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
         {children}
-        <GoogleAnalytics gaId="G-XXXXXXXXXX" />
+        <GoogleAnalytics gaId="G-HPX7DVWWJS" />
       </body>
     </html>
   )
