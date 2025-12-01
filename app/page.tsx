@@ -903,7 +903,7 @@ export default function Home() {
             <h2 className="section-title">COMPÉTENCES</h2>
             <div className="skills-grid-modern">
               {skills.map((skill, index) => (
-                <div key={index} className={`skill-box ${skill.highlight ? 'highlight-box' : ''}`}>
+                <div key={index} className="skill-box">
                   <div className="skill-box-header">
                     <FontAwesomeIcon icon={skill.icon} className="skill-icon-large" />
                     <h3 className="skill-box-title">{skill.title}</h3>
