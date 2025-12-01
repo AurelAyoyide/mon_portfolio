@@ -6,47 +6,41 @@ import 'leaflet/dist/leaflet.css'
 
 const locations = [
   {
-    coords: [50.9375, 6.9603] as [number, number],
-    country: 'Germany',
+    coords: [6.3651, 2.4183] as [number, number], // Epitech Bénin - Boulevard Saint Michel
+    country: 'Benin',
     isCurrent: true,
     companies: [
       {
-        city: 'Cologne',
-        company: 'Unicepta',
-        period: '2020 - Present',
-        role: 'Senior Software Engineer'
+        city: 'Cotonou',
+        company: 'Epitech Coding Academy',
+        period: '2025',
+        role: 'Formation dev web full stack'
       }
     ]
   },
   {
-    coords: [41.3275, 19.8187] as [number, number],
-    country: 'Albania',
+    coords: [6.381667, 2.392222] as [number, number], // Licence - 9C6J+HVV, Ave Proche
+    country: 'Benin',
     isCurrent: false,
     companies: [
       {
-        city: 'Tirana',
-        company: 'Ritech Solutions',
-        period: '2018 - 2020',
-        role: 'Senior Software Engineer'
-      },
-      {
-        city: 'Tirana',
-        company: 'Group of Companies',
-        period: '2015 - 2017',
-        role: 'Software Engineer'
+        city: 'Cotonou',
+        company: 'Licence Pro Systèmes Informatiques',
+        period: '2019 - 2024',
+        role: 'Formation'
       }
     ]
   },
   {
-    coords: [48.8566, 2.3522] as [number, number],
-    country: 'France',
+    coords: [6.383611, 2.406111] as [number, number], // Lycée - 9FM4+HFC, Rue 1461
+    country: 'Benin',
     isCurrent: false,
     companies: [
       {
-        city: 'Paris',
-        company: 'Gutenberg Technology',
-        period: '2017 - 2018',
-        role: 'Software Engineer'
+        city: 'Cotonou',
+        company: 'Technicien Maintenance',
+        period: '2015 - 2018',
+        role: 'Formation'
       }
     ]
   }
@@ -59,7 +53,7 @@ export default function JourneyMap() {
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return
 
-    const initialView = { center: [48.5, 10] as [number, number], zoom: 4 }
+    const initialView = { center: [6.3703, 2.3912] as [number, number], zoom: 12 }
 
     // Initialize map
     const map = L.map(mapRef.current, {

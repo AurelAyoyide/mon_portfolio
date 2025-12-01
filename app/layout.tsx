@@ -2,35 +2,36 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 config.autoAddCss = false
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://marjoballabani.me'),
-  title: 'Marjo Ballabani | Senior Software Engineer | Full-Stack & Cloud Expert',
-  description: 'Senior Software Engineer with 11+ years of experience in distributed systems, microservices, and cloud technologies. Expert in Node.js, React, Python, Google Cloud. Based in Munich, Germany.',
-  keywords: 'Marjo Ballabani, Software Engineer, Full-Stack Developer, Cloud Engineer, Microservices, Node.js, React, Python, Google Cloud, AWS, Distributed Systems, Munich, Germany',
-  authors: [{ name: 'Marjo Ballabani' }],
+  metadataBase: new URL('https://aurelayoyide.netlify.app'),
+  title: 'Aurel AYOYIDE | Développeur Fullstack & Desktop',
+  description: 'Développeur Fullstack & Desktop passionné. Expert en React, Next.js, Vue.js, NestJS, Laravel, C# et VB.NET. Création d\'applications web modernes et logiciels desktop performants. Basé à Cotonou, Bénin.',
+  keywords: 'Aurel AYOYIDE, Développeur Fullstack, Desktop Developer, React, Next.js, Vue.js, NestJS, Laravel, C#, VB.NET, TypeScript, JavaScript, MongoDB, MySQL, Cotonou, Bénin',
+  authors: [{ name: 'Aurel AYOYIDE' }],
   openGraph: {
     type: 'website',
-    url: 'https://marjoballabani.me',
-    siteName: 'Marjo Ballabani',
-    title: 'Marjo Ballabani | Senior Software Engineer',
-    description: 'Senior Software Engineer with 11+ years of experience in distributed systems, cloud technologies, and full-stack development.',
+    url: 'https://aurelayoyide.netlify.app',
+    siteName: 'Aurel AYOYIDE',
+    title: 'Aurel AYOYIDE | Développeur Fullstack & Desktop',
+    description: 'Développeur passionné spécialisé en développement web moderne et applications desktop. Expert React, Next.js, Vue.js, C# et VB.NET.',
     images: [
       {
         url: '/image/social-cover.png',
         width: 1200,
         height: 630,
-        alt: 'Marjo Ballabani - Senior Software Engineer',
+        alt: 'Aurel AYOYIDE - Développeur Fullstack & Desktop',
       },
     ],
-    locale: 'en_US',
+    locale: 'fr_FR',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Marjo Ballabani | Senior Software Engineer',
-    description: 'Senior Software Engineer with 11+ years of experience in distributed systems, cloud technologies, and full-stack development.',
+    title: 'Aurel AYOYIDE | Développeur Fullstack & Desktop',
+    description: 'Développeur passionné spécialisé en développement web moderne et applications desktop. Expert React, Next.js, Vue.js, C# et VB.NET.',
     images: ['/image/social-cover.png'],
   },
   robots: 'index, follow',
@@ -51,6 +52,7 @@ export default function RootLayout({
       </head>
       <body style={{ fontFamily: "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}>
         {children}
+        <GoogleAnalytics gaId="G-XXXXXXXXXX" />
       </body>
     </html>
   )

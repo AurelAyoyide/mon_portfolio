@@ -76,16 +76,14 @@ export default function TerminalPage() {
       description: "Plateforme complète de dashboards personnalisables avec widgets modulaires. Interface drag & drop, authentification JWT, API REST avec NestJS.",
       image: "/image/dashboard-preview.png",
       technologies: ["React", "NestJS", "MongoDB", "Tailwind CSS"],
-      demo: "https://showtime.agence-fastlane.com",
-      repo: "https://github.com/AurelAyoyide"
+      demo: "https://showtime.agence-fastlane.com"
     },
     {
       title: "Pineapple - Critique de films",
       description: "Plateforme de critiques cinématographiques avec intégration API TMDB. Server-Side Rendering avec Next.js pour performances optimales.",
       image: "/image/pineapple-preview.png",
       technologies: ["Next.js", "API TMDB", "Tailwind CSS", "TypeScript"],
-      demo: "https://pineapple2025.vercel.app/",
-      repo: "https://github.com/AurelAyoyide"
+      demo: "https://pineapple2025.vercel.app/"
     },
     {
       title: "AurelOS Portfolio - Terminal interactif",
@@ -100,16 +98,14 @@ export default function TerminalPage() {
       description: "Réseau social permettant de centraliser et partager des commentaires sur tout type de contenu internet. Système de threading et votes.",
       image: "/image/yowl-preview.png",
       technologies: ["Laravel", "Vue.js", "Tailwind CSS", "MySQL"],
-      demo: "https://yowlraib.netlify.app/",
-      repo: "https://github.com/AurelAyoyide"
+      demo: "https://yowlraib.netlify.app/"
     },
     {
       title: "Post-it - Gestionnaire de tâches",
       description: "Application légère de gestion de tâches inspirée des Post-it physiques. Interface drag & drop intuitive avec catégorisation par couleurs.",
       image: "/image/postit-preview.png",
       technologies: ["Vue.js", "Tailwind CSS", "LocalStorage"],
-      demo: "https://apostit.netlify.app/",
-      repo: "https://github.com/AurelAyoyide"
+      demo: "https://apostit.netlify.app/"
     },
   ]
 
@@ -1498,9 +1494,11 @@ ${wrapWithColor('💡 Tip:', accent)} Le CV sera téléchargé au format PDF`
                       <a href={project.demo} className="project-link" target="_blank" rel="noopener noreferrer">
                         <i className="fas fa-external-link-alt"></i> Demo
                       </a>
-                      <a href={project.repo} className="project-link" target="_blank" rel="noopener noreferrer">
-                        <i className="fab fa-github"></i> Repository
-                      </a>
+                      {project.repo && (
+                        <a href={project.repo} className="project-link" target="_blank" rel="noopener noreferrer">
+                          <i className="fab fa-github"></i> Repository
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>

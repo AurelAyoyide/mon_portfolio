@@ -12,13 +12,14 @@ import {
   faPalette, faMobileAlt, faMobile, faBolt, faNetworkWired,
   faDharmachakra, faCodeBranch, faPlay, faLeaf, faMemory,
   faSearch, faProjectDiagram, faChartLine, faVial, faTasks,
-  faCubes, faExchangeAlt, faRoute, faInbox, faSyncAlt, faUsers
+  faCubes, faExchangeAlt, faRoute, faInbox, faSyncAlt, faUsers,
+  faDownload, faPhone, faCertificate
 } from '@fortawesome/free-solid-svg-icons'
 import { 
   faGithub, faLinkedin, faStackOverflow, faReact, faNodeJs, 
   faPython, faJs, faHtml5, faCss3, faGoogle, faDocker,
   faAngular, faBootstrap, faAws, faMicrosoft, faGitAlt, 
-  faJira, faJava
+  faJira, faJava, faVuejs, faPhp
 } from '@fortawesome/free-brands-svg-icons'
 
 // Dynamic import for Leaflet (client-side only)
@@ -188,7 +189,7 @@ export default function Home() {
       }
       
       // Checkpoint updates
-      const sections = ['hero', 'about', 'experience', 'skills', 'contact']
+      const sections = ['hero', 'about', 'experience', 'skills', 'projects', 'contact']
       let active = 0
       sections.forEach((sectionId, index) => {
         const section = document.getElementById(sectionId)
@@ -465,35 +466,29 @@ export default function Home() {
   const experiences = [
     {
       id: 'exp-1',
-      country: 'Germany',
-      title: 'Senior Software Engineer @ Unicepta',
-      date: 'Jul 2020 - Nov 2025',
-      description: 'Part of Core team working on AI-powered Media & Data Intelligence Solutions. Designed and built microservices for distributed systems, engineered data pipelines on Google Cloud, and wrote full-stack code for front/back/cloud.',
-      location: 'Cologne, Germany (Hybrid)'
-    },
-    {
-      id: 'exp-2',
-      country: 'Albania',
-      title: 'Senior Software Engineer @ Ritech Solutions',
-      date: 'Jul 2018 - Jul 2020',
-      description: 'Part of Core team leading tech decisions. Led AppriseMobile CRM for Toyota and Microsoft IOT marketing project deployed across USA, Canada, and Australia.',
-      location: 'Tirana, Albania'
+      country: 'Benin',
+      title: 'Formation Epitech Coding Academy',
+      date: 'Juillet 2025 - Décembre 2025',
+      description: 'Formation intensive en développement web full stack, méthodologies agiles et technologies modernes. Maîtrise des frameworks JavaScript/TypeScript, architecture backend et best practices du développement.',
+      location: 'Cotonou, Bénin'
     },
     {
       id: 'exp-3',
-      country: 'France',
-      title: 'Software Engineer @ Gutenberg Technology',
-      date: 'Feb 2017 - Aug 2018',
-      description: 'Fullstack developer building real-time publisher platform used by National Geographic, IUBH, and Fujitsu. Developed highly available MEFIO platform and integrated SaaS strategy.',
-      location: 'Paris, France'
+      country: 'Benin',
+      title: 'Licence Professionnelle en Systèmes Informatiques et Logiciels',
+      date: '2019 - 2024',
+      description: 'Formation approfondie en systèmes informatiques et développement logiciel. Expertise en architecture logicielle, programmation et administration de systèmes.',
+      location: 'Cotonou, Bénin',
+      address: '9C6J+HVV, Ave Proche, Cotonou, Benin'
     },
     {
       id: 'exp-4',
-      country: 'Albania',
-      title: 'Software Engineer @ Group of Companies',
-      date: 'Mar 2015 - Feb 2017',
-      description: 'Developed bar/restaurant management app, optimized bank system aggregation from 11h to 1h, and built water supply billing process for Albania government project.',
-      location: 'Tirana, Albania'
+      country: 'Benin',
+      title: 'Technicien en Maintenance Informatique',
+      date: '2015 - 2018',
+      description: 'Premiers pas dans le monde de l\'informatique. Maintenance de systèmes, support technique et découverte du développement logiciel qui a forgé ma passion pour la programmation.',
+      location: 'Cotonou, Bénin',
+      address: '9FM4+HFC, Rue 1461, Cotonou, Benin'
     }
   ]
 
@@ -577,54 +572,40 @@ export default function Home() {
 
   const skills = [
     {
-      icon: faReact,
-      title: 'Frontend',
-      tags: ['React.js', 'Redux', 'MobX', 'Angular', 'Bootstrap', 'Material-UI', 'React Native', 'Ionic']
+      icon: faCode,
+      title: 'Langages',
+      tags: ['JavaScript', 'TypeScript', 'Python', 'Java', 'PHP', 'C#', 'VB.NET', 'HTML', 'CSS']
     },
     {
-      icon: faCode,
-      title: 'Languages',
-      tags: ['JavaScript', 'TypeScript', 'Python', 'Java', 'Kotlin', 'SQL', 'HTML', 'CSS']
+      icon: faReact,
+      title: 'Frontend',
+      tags: ['React.js', 'Next.js', 'Vue.js', 'React Native', 'Tailwind CSS', 'Bootstrap', 'Pinia']
     },
     {
       icon: faNodeJs,
       title: 'Backend',
-      tags: ['Node.js', 'Express.js', 'Hapi', 'Firebase', 'Cloud Functions', 'AWS Lambda', 'AWS S3', 'NGINX']
-    },
-    {
-      icon: faCloud,
-      title: 'Cloud & DevOps',
-      tags: ['Google Cloud', 'AWS', 'Azure', 'Docker', 'Kubernetes', 'Terraform', 'Cloud Run']
+      tags: ['Node.js', 'Express.js', 'NestJS', 'Laravel', 'Flask', 'REST API', 'JWT']
     },
     {
       icon: faDatabase,
-      title: 'Databases',
-      tags: ['MongoDB', 'Firestore', 'RethinkDB', 'Redis', 'PostgreSQL', 'SQL Server', 'BigQuery']
+      title: 'Bases de données',
+      tags: ['MongoDB', 'MySQL', 'PostgreSQL', 'SQLite', 'Firebase']
+    },
+    {
+      icon: faDocker,
+      title: 'Déploiement & Versioning',
+      tags: ['Git', 'GitHub Actions', 'Docker', 'Vercel', 'Netlify']
     },
     {
       icon: faTools,
-      title: 'Tools & More',
-      tags: ['Git', 'Elasticsearch', 'GraphQL', 'pandas', 'Jest', 'Cypress', 'Jira', 'VSCode']
-    },
-    {
-      icon: faSitemap,
-      title: 'Architecture',
-      tags: ['Microservices', 'SaaS', 'Pub/Sub', 'Routing Slip', 'Dead Letter Queues'],
-      highlight: true
-    },
-    {
-      icon: faUsersCog,
-      title: 'Methodologies',
-      tags: ['Agile', 'Scrum', 'CI/CD', 'TDD'],
-      highlight: true
+      title: 'Outils',
+      tags: ['Postman (certifié)', 'VS Code', 'Visual Studio', 'Figma']
     }
   ]
 
   const languages = [
-    { name: 'Albanian', stars: 3 },
-    { name: 'English', stars: 3 },
-    { name: 'German', stars: 2 },
-    { name: 'Italian', stars: 1 }
+    { name: 'Français', stars: 3 },
+    { name: 'Anglais', stars: 2 }
   ]
 
   return (
@@ -661,8 +642,8 @@ export default function Home() {
           </div>
         </div>
         <div className="loader-wrapper">
-          <div className="loader-letter">M</div>
-          <div className="loader-letter">B</div>
+          <div className="loader-letter">A</div>
+          <div className="loader-letter">A</div>
         </div>
         <div className="loader-progress-bar">
           <div className="loader-progress-fill"></div>
@@ -674,7 +655,7 @@ export default function Home() {
         <div className="progress-bar-container">
           <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
           <div className="progress-checkpoints">
-            {['hero', 'about', 'experience', 'skills', 'contact'].map((section, index) => (
+            {['hero', 'about', 'experience', 'skills', 'projects', 'contact'].map((section, index) => (
               <div 
                 key={section}
                 className={`checkpoint ${index <= activeCheckpoint ? 'active' : ''}`}
@@ -689,13 +670,14 @@ export default function Home() {
         {/* Navbar */}
         <nav className={`navbar ${navHidden ? 'navbar-hidden' : ''}`}>
           <div className="nav-content">
-            <a href="#" className="nav-brand">MB</a>
+            <a href="#" className="nav-brand">AA</a>
             <div className="nav-right">
-              <a href="#hero" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>Home</a>
-              <a href="#about" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About</a>
-              <a href="#experience" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('experience'); }}>Journey</a>
-              <a href="#skills" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>Skills</a>
-              <a href="#contact" className="nav-cta" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Get in Touch!</a>
+              <a href="#hero" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>Accueil</a>
+              <a href="#about" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>À propos</a>
+              <a href="#experience" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('experience'); }}>Parcours</a>
+              <a href="#skills" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>Compétences</a>
+              <a href="#projects" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projets</a>
+              <a href="#contact" className="nav-cta" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Me Contacter</a>
               <button className="theme-toggle-nav" onClick={toggleTheme} aria-label="Toggle theme">
                 <FontAwesomeIcon icon={theme === 'light' ? faMoon : faSun} />
               </button>
@@ -708,32 +690,23 @@ export default function Home() {
           <div className="hero-content" ref={heroContentRef}>
             <div className="hero-left">
               <p className="hero-greeting">{greeting || 'Hi there! 👋'}</p>
-              <h1 className="hero-name">I&apos;m Marjo Ballabani.</h1>
+              <h1 className="hero-name">I&apos;m Aurel AYOYIDE.</h1>
               <p className="hero-description">
-                Based in Munich, Germany, I&apos;m a Senior Software Engineer. I love to work with distributed systems, data pipelines, and cloud technologies. I&apos;m passionate about microservices, full-stack development, and building cool stuff.
+                Based in Cotonou, Bénin, I&apos;m a Fullstack & Desktop Developer. I love building modern web applications and performant desktop software. I&apos;m passionate about React, Next.js, and creating exceptional user experiences.
               </p>
               <div className="hero-social">
-                <a href="https://github.com/marjoballabani" target="_blank" rel="noopener noreferrer" className="social-btn">
+                <a href="https://github.com/AurelAyoyide" target="_blank" rel="noopener noreferrer" className="social-btn">
                   <FontAwesomeIcon icon={faGithub} />
                 </a>
-                <a href="https://www.linkedin.com/in/marjo-ballabani/" target="_blank" rel="noopener noreferrer" className="social-btn">
+                <a href="https://linkedin.com/in/aurel-ayoyide-864863396" target="_blank" rel="noopener noreferrer" className="social-btn">
                   <FontAwesomeIcon icon={faLinkedin} />
                 </a>
-                <a href="https://stackoverflow.com/users/7563517/marjo-ballabani" target="_blank" rel="noopener noreferrer" className="social-btn">
-                  <FontAwesomeIcon icon={faStackOverflow} />
+                <a href="mailto:aurel.ayoyide@epitech.eu" className="social-btn">
+                  <FontAwesomeIcon icon={faEnvelope} />
                 </a>
               </div>
               <div className="hero-cta-container">
-                <div className="coffee-cta-wrapper">
-                  <div className="coffee-arrow">
-                    <span className="coffee-arrow-text">Buy me a coffee</span>
-                    <Image src="/image/arrow.png" alt="arrow" className="coffee-arrow-img" width={140} height={140} />
-                  </div>
-                  <a href="https://www.paypal.com/paypalme/Ballabani" target="_blank" rel="noopener noreferrer" className="btn-coffee">
-                    <Image src="/image/caffe-icon.gif" alt="Coffee" className="coffee-icon-img" width={52} height={52} unoptimized />
-                  </a>
-                </div>
-                <a href="#contact" className="btn-cta" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Get in Touch!</a>
+                <a href="#contact" className="btn-cta" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Me Contacter</a>
               </div>
             </div>
             <div className="hero-right">
@@ -742,7 +715,7 @@ export default function Home() {
                 <Image 
                   ref={heroPhotoRef as any}
                   src="/image/avatar-gpt.png" 
-                  alt="Marjo Ballabani" 
+                  alt="Aurel AYOYIDE" 
                   className={`hero-photo ${photoTilted ? 'tilted' : ''}`}
                   width={400} 
                   height={400}
@@ -777,19 +750,19 @@ export default function Home() {
                     <circle cx="50" cy="35" r="3" fill="#000"/>
                   </svg>
                 </div>
-                <div className="deco-label">Full-Stack Ninja</div>
+                <div className="deco-label">Dev Fullstack et Desktop</div>
               </div>
             </div>
           </div>
           <div className="tech-badges">
-            <span className="tech-badge"><FontAwesomeIcon icon={faNodeJs} /> Node.js</span>
-            <span className="tech-badge"><FontAwesomeIcon icon={faReact} /> React</span>
-            <span className="tech-badge"><FontAwesomeIcon icon={faPython} /> Python</span>
             <span className="tech-badge"><FontAwesomeIcon icon={faJs} /> JavaScript</span>
-            <span className="tech-badge"><FontAwesomeIcon icon={faHtml5} /> HTML</span>
             <span className="tech-badge"><FontAwesomeIcon icon={faCss3} /> TypeScript</span>
-            <span className="tech-badge"><FontAwesomeIcon icon={faGoogle} /> Google Cloud</span>
-            <span className="tech-badge"><FontAwesomeIcon icon={faDocker} /> Docker</span>
+            <span className="tech-badge"><FontAwesomeIcon icon={faReact} /> React</span>
+            <span className="tech-badge"><FontAwesomeIcon icon={faVuejs} /> Vue.js</span>
+            <span className="tech-badge"><FontAwesomeIcon icon={faNodeJs} /> Node.js</span>
+            <span className="tech-badge"><FontAwesomeIcon icon={faPhp} /> PHP</span>
+            <span className="tech-badge"><FontAwesomeIcon icon={faPython} /> Python</span>
+            <span className="tech-badge"><FontAwesomeIcon icon={faHtml5} /> HTML/CSS</span>
           </div>
         </section>
 
@@ -817,31 +790,30 @@ export default function Home() {
         <div className="container">
           {/* About Section */}
           <section className="section fade-in" id="about">
-            <h2 className="section-title">ABOUT</h2>
+            <h2 className="section-title">À PROPOS</h2>
             <div className="card">
               <p className="text">
-                Highly experienced and dynamic software engineer with a rich professional background spanning over <span className="highlight highlight-yellow" data-direction="left">11 years</span>.
-                Throughout my career, I&apos;ve held positions in renowned tech companies across <span className="highlight highlight-pink" data-direction="right">Albania, France, USA, and Germany</span>.
-                My contributions have been pivotal in designing and constructing <span className="highlight highlight-cyan" data-direction="left">microservices for distributed systems</span>,
-                implementing <span className="highlight highlight-green" data-direction="right">data pipelines on Google Cloud</span>, and engaging in <span className="highlight highlight-yellow" data-direction="left">full-stack development</span>.
+                Développeur passionné <span className="highlight highlight-yellow" data-direction="left">depuis le lycée</span>, j&apos;ai construit mon expertise en <span className="highlight highlight-pink" data-direction="right">développement Fullstack & Desktop</span>.
+                De la maintenance informatique à l&apos;architecture logicielle complexe, mon parcours m&apos;a forgé une <span className="highlight highlight-cyan" data-direction="left">polyvalence technique unique</span>.
+                Ma maîtrise couvre le <span className="highlight highlight-green" data-direction="right">développement web moderne</span> (React, Next.js, Vue.js, NestJS, Laravel) et <span className="highlight highlight-yellow" data-direction="left">desktop</span> (C#, VB.NET).
               </p>
               <p className="text">
-                My passion for <span className="highlight highlight-cyan" data-direction="right">continuous learning and innovation</span> is evident through my active presence on various platforms.
-                I thrive on staying updated with the <span className="highlight highlight-pink" data-direction="left">latest trends and technologies</span> in the ever-evolving tech landscape.
+                Ma passion pour <span className="highlight highlight-cyan" data-direction="right">l&apos;apprentissage continu</span> et la <span className="highlight highlight-pink" data-direction="left">création de solutions innovantes</span>
+                me pousse à rester constamment à jour avec les <span className="highlight highlight-green" data-direction="right">dernières technologies</span> et meilleures pratiques du développement logiciel.
               </p>
               <p className="text">
-                I bring a unique blend of <span className="highlight highlight-yellow" data-direction="right">technical expertise</span>, <span className="highlight highlight-green" data-direction="left">leadership qualities</span>, and a genuine enthusiasm for creating
-                <span className="highlight highlight-cyan" data-direction="right"> impactful software solutions</span>.
+                Je combine <span className="highlight highlight-yellow" data-direction="right">créativité</span>, <span className="highlight highlight-green" data-direction="left">rigueur technique</span> et <span className="highlight highlight-cyan" data-direction="right">esprit d&apos;équipe</span>
+                pour transformer des idées en <span className="highlight highlight-pink" data-direction="left">applications concrètes et impactantes</span>.
               </p>
             </div>
           </section>
 
           {/* Journey Section */}
           <section className="section journey-section fade-in" id="experience">
-            <h2 className="section-title-center">My Journey</h2>
+            <h2 className="section-title-center">Mon Parcours</h2>
             <div className="journey-container">
               <div className="journey-timeline">
-                <h3 className="timeline-header">Journey Timeline</h3>
+                <h3 className="timeline-header">Chronologie</h3>
                 <div className="timeline-list">
                   {experiences.map((exp) => (
                     <div key={exp.id} className="timeline-item-flat" data-country={exp.country}>
@@ -928,7 +900,7 @@ export default function Home() {
 
           {/* Skills Section */}
           <section className="section" id="skills">
-            <h2 className="section-title">SKILLS</h2>
+            <h2 className="section-title">COMPÉTENCES</h2>
             <div className="skills-grid-modern">
               {skills.map((skill, index) => (
                 <div key={index} className={`skill-box ${skill.highlight ? 'highlight-box' : ''}`}>
@@ -949,26 +921,155 @@ export default function Home() {
             </div>
           </section>
 
+          {/* Projects Section */}
+          <section className="section fade-in" id="projects">
+            <h2 className="section-title">PROJETS</h2>
+            <div className="projects-grid">
+              <div className="project-card">
+                <div className="project-header">
+                  <h3 className="project-title">Dashboard Analytics</h3>
+                  <div className="project-tags">
+                    <span className="tag">React</span>
+                    <span className="tag">NestJS</span>
+                    <span className="tag">MongoDB</span>
+                  </div>
+                </div>
+                <div className="project-iframe-container">
+                  <iframe 
+                    src="https://showtime.agence-fastlane.com" 
+                    title="Dashboard Analytics Demo"
+                    className="project-iframe"
+                    loading="lazy"
+                    scrolling="no"
+                  />
+                </div>
+                <p className="project-description">
+                  Plateforme web pour visualiser des données sous forme de graphiques et tableaux de bord. 
+                  Les utilisateurs peuvent personnaliser leur espace avec des widgets qu'ils peuvent déplacer. 
+                  Système de connexion sécurisé et base de données pour sauvegarder les configurations.
+                </p>
+                <div className="project-links">
+                  <a href="https://showtime.agence-fastlane.com" target="_blank" rel="noopener noreferrer" className="project-link">
+                    <FontAwesomeIcon icon={faTerminal} /> Démo
+                  </a>
+                </div>
+              </div>
+
+              <div className="project-card">
+                <div className="project-header">
+                  <h3 className="project-title">Pineapple</h3>
+                  <div className="project-tags">
+                    <span className="tag">Next.js</span>
+                    <span className="tag">API TMDB</span>
+                    <span className="tag">Tailwind</span>
+                  </div>
+                </div>
+                <div className="project-iframe-container">
+                  <iframe 
+                    src="https://pineapple2025.vercel.app/" 
+                    title="Pineapple Demo"
+                    className="project-iframe"
+                    loading="lazy"
+                    scrolling="no"
+                  />
+                </div>
+                <p className="project-description">
+                  Site web pour découvrir et critiquer des films et séries. Utilise l'API TMDB pour récupérer les informations 
+                  des films. Les pages se chargent rapidement grâce au système de rendu côté serveur de Next.js. 
+                  Design responsive qui s'adapte à tous les écrans.
+                </p>
+                <div className="project-links">
+                  <a href="https://pineapple2025.vercel.app/" target="_blank" rel="noopener noreferrer" className="project-link">
+                    <FontAwesomeIcon icon={faTerminal} /> Démo
+                  </a>
+                </div>
+              </div>
+
+              <div className="project-card">
+                <div className="project-header">
+                  <h3 className="project-title">AurelOS Portfolio</h3>
+                  <div className="project-tags">
+                    <span className="tag">Next.js</span>
+                    <span className="tag">TypeScript</span>
+                    <span className="tag">CSS</span>
+                  </div>
+                </div>
+                <div className="project-iframe-container">
+                  <iframe 
+                    src="https://aurelayoyide.netlify.app/terminal" 
+                    title="AurelOS Portfolio Demo"
+                    className="project-iframe"
+                    loading="lazy"
+                    scrolling="no"
+                  />
+                </div>
+                <p className="project-description">
+                  Portfolio original présenté comme un terminal d'ordinateur interactif. 
+                  Contient une séquence de démarrage animée, plus de 15 commandes utilisables (comme whoami, skills, projects), 
+                  un mini-jeu Snake intégré, et plusieurs thèmes de couleurs au choix.
+                </p>
+                <div className="project-links">
+                  <a href="https://aurelayoyide.netlify.app/" target="_blank" rel="noopener noreferrer" className="project-link">
+                    <FontAwesomeIcon icon={faTerminal} /> Démo
+                  </a>
+                  <a href="https://github.com/AurelAyoyide/mon_portfolio" target="_blank" rel="noopener noreferrer" className="project-link">
+                    <FontAwesomeIcon icon={faGithub} /> Code
+                  </a>
+                </div>
+              </div>
+
+              <div className="project-card">
+                <div className="project-header">
+                  <h3 className="project-title">YOWL</h3>
+                  <div className="project-tags">
+                    <span className="tag">Laravel</span>
+                    <span className="tag">Vue.js</span>
+                    <span className="tag">MySQL</span>
+                  </div>
+                </div>
+                <div className="project-iframe-container">
+                  <iframe 
+                    src="https://yowlraib.netlify.app/" 
+                    title="YOWL Demo"
+                    className="project-iframe"
+                    loading="lazy"
+                    scrolling="no"
+                  />
+                </div>
+                <p className="project-description">
+                  Réseau social permettant de commenter n'importe quel contenu du web (vidéos, articles, produits). 
+                  Système de discussions avec réponses imbriquées et votes. Les utilisateurs peuvent se connecter, 
+                  échanger des commentaires et recevoir des notifications en temps réel.
+                </p>
+                <div className="project-links">
+                  <a href="https://yowlraib.netlify.app/" target="_blank" rel="noopener noreferrer" className="project-link">
+                    <FontAwesomeIcon icon={faTerminal} /> Démo
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Education & Languages */}
           <section className="section education-languages-section" id="education">
             <div className="education-languages-grid">
               <div className="education-column">
-                <h2 className="section-title">EDUCATION</h2>
+                <h2 className="section-title">FORMATION</h2>
                 <div className="card education-card">
                   <div className="education-header">
                     <div>
-                      <h3 className="education-title">Bachelor&apos;s Degree in Computer Science</h3>
-                      <p className="education-school">University of Tirana</p>
+                      <h3 className="education-title">Formation Développement Web Full Stack</h3>
+                      <p className="education-school">Epitech Coding Academy Bénin</p>
                     </div>
-                    <span className="badge">2013 - 2016</span>
+                    <span className="badge">Juillet - Décembre 2025</span>
                   </div>
                   <p className="education-location">
-                    <FontAwesomeIcon icon={faMapMarkerAlt} /> Tirana, Albania
+                    <FontAwesomeIcon icon={faMapMarkerAlt} /> Cotonou, Bénin
                   </p>
                 </div>
               </div>
               <div className="languages-column">
-                <h2 className="section-title">LANGUAGES</h2>
+                <h2 className="section-title">LANGUES</h2>
                 <div className="card languages-card">
                   {languages.map((lang, index) => (
                     <div key={index} className="language-item">
@@ -987,21 +1088,31 @@ export default function Home() {
 
           {/* Contact Section */}
           <section className="section fade-in" id="contact">
-            <h2 className="section-title">GET IN TOUCH</h2>
+            <h2 className="section-title">CONTACT</h2>
             <div className="contact-container-compact">
-              <p className="contact-intro">Let&apos;s build something amazing together</p>
+              <p className="contact-intro">Construisons ensemble quelque chose d'incroyable</p>
               <div className="contact-grid">
-                <a href="https://linkedin.com/in/marjoballabani" target="_blank" rel="noopener noreferrer" className="contact-card">
+                <a href="https://linkedin.com/in/aurel-ayoyide-864863396" target="_blank" rel="noopener noreferrer" className="contact-card">
                   <FontAwesomeIcon icon={faLinkedin} />
                   <span>LinkedIn</span>
                 </a>
-                <a href="https://github.com/marjoballabani" target="_blank" rel="noopener noreferrer" className="contact-card">
+                <a href="https://github.com/AurelAyoyide" target="_blank" rel="noopener noreferrer" className="contact-card">
                   <FontAwesomeIcon icon={faGithub} />
                   <span>GitHub</span>
                 </a>
-                <a href="https://stackoverflow.com/users/7563517/marjo-ballabani" target="_blank" rel="noopener noreferrer" className="contact-card">
-                  <FontAwesomeIcon icon={faStackOverflow} />
-                  <span>Stack Overflow</span>
+                <a href="mailto:aurel.ayoyide@epitech.eu" className="contact-card">
+                  <FontAwesomeIcon icon={faEnvelope} />
+                  <span>Email</span>
+                </a>
+                <a href="tel:+22901968118559" className="contact-card">
+                  <FontAwesomeIcon icon={faPhone} />
+                  <span>+229 01 96 81 18 59</span>
+                </a>
+              </div>
+              <div className="cv-download-section">
+                <a href="/Aurel_AYOYIDE_Developpeur_full_stack.pdf" download className="btn-download-cv">
+                  <FontAwesomeIcon icon={faDownload} />
+                  <span>Télécharger mon CV</span>
                 </a>
               </div>
             </div>
@@ -1012,34 +1123,35 @@ export default function Home() {
             <div className="footer-compact">
               <div className="footer-main">
                 <div className="footer-brand-compact">
-                  <strong>MARJO BALLABANI</strong>
-                  <span>Senior Software Engineer</span>
+                  <strong>AUREL AYOYIDE</strong>
+                  <span>Développeur Fullstack & Desktop</span>
                 </div>
                 <div className="footer-nav-compact">
-                  <a href="#hero" onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>Home</a>
-                  <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About</a>
-                  <a href="#experience" onClick={(e) => { e.preventDefault(); scrollToSection('experience'); }}>Experience</a>
-                  <a href="#skills" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>Skills</a>
+                  <a href="#hero" onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>Accueil</a>
+                  <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>À propos</a>
+                  <a href="#experience" onClick={(e) => { e.preventDefault(); scrollToSection('experience'); }}>Parcours</a>
+                  <a href="#skills" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }}>Compétences</a>
+                  <a href="#projects" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projets</a>
                 </div>
                 <div className="footer-social-compact">
-                  <a href="https://github.com/marjoballabani" target="_blank" rel="noopener noreferrer" title="GitHub">
+                  <a href="https://github.com/AurelAyoyide" target="_blank" rel="noopener noreferrer" title="GitHub">
                     <FontAwesomeIcon icon={faGithub} />
                   </a>
-                  <a href="https://linkedin.com/in/marjoballabani" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                  <a href="https://linkedin.com/in/aurel-ayoyide-864863396" target="_blank" rel="noopener noreferrer" title="LinkedIn">
                     <FontAwesomeIcon icon={faLinkedin} />
                   </a>
-                  <a href="https://stackoverflow.com/users/7563517/marjo-ballabani" target="_blank" rel="noopener noreferrer" title="Stack Overflow">
-                    <FontAwesomeIcon icon={faStackOverflow} />
+                  <a href="https://aurelayoyide.netlify.app" target="_blank" rel="noopener noreferrer" title="Portfolio">
+                    <FontAwesomeIcon icon={faEnvelope} />
                   </a>
-                  <a href="mailto:marjoballabani@gmail.com" title="Email">
+                  <a href="mailto:aurel.ayoyide@epitech.eu" title="Email">
                     <FontAwesomeIcon icon={faEnvelope} />
                   </a>
                 </div>
               </div>
               <div className="footer-bottom-compact">
-                <span>© 2025 Marjo Ballabani</span>
+                <span>© 2025 Aurel AYOYIDE</span>
                 <Link href="/terminal" className="footer-terminal-link-compact">
-                  <FontAwesomeIcon icon={faTerminal} /> Terminal
+                  <FontAwesomeIcon icon={faTerminal} /> AurelOS
                 </Link>
               </div>
             </div>
