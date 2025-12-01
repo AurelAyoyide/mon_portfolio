@@ -996,7 +996,7 @@ export default function Home() {
                 </div>
                 <div className="project-iframe-container">
                   <iframe 
-                    src="https://aurelayoyide.netlify.app/terminal" 
+                    src="https://aurelayoyide.netlify.app/" 
                     title="AurelOS Portfolio Demo"
                     className="project-iframe"
                     loading="lazy"
@@ -1004,7 +1004,7 @@ export default function Home() {
                   />
                 </div>
                 <p className="project-description">
-                  Portfolio original présenté comme un terminal d'ordinateur interactif. 
+                  Portfolio original présenté aveccomme un terminal d'ordinateur interactif. 
                   Contient une séquence de démarrage animée, plus de 15 commandes utilisables (comme whoami, skills, projects), 
                   un mini-jeu Snake intégré, et plusieurs thèmes de couleurs au choix.
                 </p>
