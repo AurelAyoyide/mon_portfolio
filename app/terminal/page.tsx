@@ -72,11 +72,52 @@ export default function TerminalPage() {
 
   const projects = [
     {
-      title: "Dashboard - Tableau de bord personnalisable",
-      description: "Plateforme complète de dashboards personnalisables avec widgets modulaires. Interface drag & drop, authentification JWT, API REST avec NestJS.",
-      image: "/image/dashboard-preview.png",
-      technologies: ["React", "NestJS", "MongoDB", "Tailwind CSS"],
-      demo: "https://showtime.agence-fastlane.com"
+      title: "Bono Trading - Blog de Trading",
+      description: "Plateforme d'articles, ressources et guides sur la gestion du risque et la routine de trading avec une approche méthodique et transparente.",
+      image: "/image/trading-preview.png",
+      technologies: ["Next.js", "Tailwind CSS", "TypeScript", "MDX"],
+      demo: "https://blog.bonotrading.com/",
+      repo: "https://github.com/AurelAyoyide/franckdjind-trader"
+    },
+    {
+      title: "Bono School - Espace de formation",
+      description: "Plateforme privée d'e-learning pour les apprenants en trading. Inclut le suivi de progression, des quiz et la validation de certificats publics via un code unique.",
+      image: "/image/school-preview.png",
+      technologies: ["Next.js", "React", "Tailwind CSS", "MySQL", "TypeScript"],
+      demo: "https://school.bonotrading.com/",
+      repo: "https://github.com/AurelAyoyide/franckdjind-trader"
+    },
+    {
+      title: "Luxurious.ng - Boutique d'horlogerie",
+      description: "Catalogue virtuel de montres de luxe en réplique premium. Interface dynamique et élégante conçue pour la prospection commerciale de clients du secteur.",
+      image: "/image/luxurious-preview.png",
+      technologies: ["React", "Vite", "Tailwind CSS", "Lucide React"],
+      demo: "https://luxuriousng.netlify.app/",
+      repo: "https://github.com/AurelAyoyide/jr_luxurious.ng"
+    },
+    {
+      title: "THE DROP (MrSneakers) - Showroom de sneakers",
+      description: "Showroom interactif présentant des sneakers de collection underground. Design style urbain au ton moderne développé pour attirer de nouveaux clients physiques.",
+      image: "/image/sneakers-preview.png",
+      technologies: ["React", "Vite", "Tailwind CSS", "Framer Motion"],
+      demo: "https://mrsneakers.netlify.app/",
+      repo: "https://github.com/AurelAyoyide/MrSneaker"
+    },
+    {
+      title: "ClothingColorfull - Quiet Uniform",
+      description: "Showcase minimaliste dédié à la vente de vêtements neutres (polos et t-shirts épurés). Une vitrine commerciale conçue pour séduire les clients de la mode simple.",
+      image: "/image/clothing-preview.png",
+      technologies: ["React", "Vite", "Tailwind CSS", "Cormorant Garamond"],
+      demo: "https://clothingcolorfull.netlify.app/",
+      repo: "https://github.com/AurelAyoyide/ClothingColorfull"
+    },
+    {
+      title: "ReloMidi (GrammyMelodyMind) - MIDI Studio",
+      description: "Studio d'aide à la création musicale pour beatmakers. Permet de générer des mélodies, d'instrumentaliser et de télécharger directement des fichiers MIDI générés en ligne.",
+      image: "/image/relomidi-preview.png",
+      technologies: ["React", "TypeScript", "Vite", "Web Audio API"],
+      demo: "https://grammymelodymind.netlify.app/",
+      repo: "https://github.com/AurelAyoyide/melodymind"
     },
     {
       title: "Pineapple - Critique de films",
@@ -99,13 +140,6 @@ export default function TerminalPage() {
       image: "/image/yowl-preview.png",
       technologies: ["Laravel", "Vue.js", "Tailwind CSS", "MySQL"],
       demo: "https://yowlraib.netlify.app/"
-    },
-    {
-      title: "Post-it - Gestionnaire de tâches",
-      description: "Application légère de gestion de tâches inspirée des Post-it physiques. Interface drag & drop intuitive avec catégorisation par couleurs.",
-      image: "/image/postit-preview.png",
-      technologies: ["Vue.js", "Tailwind CSS", "LocalStorage"],
-      demo: "https://apostit.netlify.app/"
     },
   ]
 
