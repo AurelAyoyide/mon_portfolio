@@ -470,6 +470,7 @@ export default function Home() {
       iframeUrl: "https://blog.bonotrading.com/",
       demoUrl: "https://blog.bonotrading.com/",
       repoUrl: "https://github.com/AurelAyoyide/franckdjind-trader",
+      previewImage: "/image/trading-preview.png",
       description: "Plateforme d'articles, ressources et guides sur la gestion du risque et la routine de trading avec une approche méthodique et transparente."
     },
     {
@@ -478,6 +479,7 @@ export default function Home() {
       iframeUrl: "https://school.bonotrading.com/",
       demoUrl: "https://school.bonotrading.com/",
       repoUrl: "https://github.com/AurelAyoyide/franckdjind-trader",
+      previewImage: "/image/school-preview.png",
       description: "Plateforme privée d'e-learning pour les apprenants en trading. Inclut le suivi de progression, des quiz et la validation de certificats publics via un code unique."
     },
     {
@@ -1009,13 +1011,24 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="project-iframe-container">
-                    <iframe
-                      src={project.iframeUrl}
-                      title={`${project.title} Demo`}
-                      className="project-iframe"
-                      loading="lazy"
-                      scrolling="no"
-                    />
+                    {project.previewImage ? (
+                      <Image
+                        src={project.previewImage}
+                        alt={`${project.title} preview`}
+                        className="project-iframe"
+                        width={800}
+                        height={450}
+                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                      />
+                    ) : (
+                      <iframe
+                        src={project.iframeUrl}
+                        title={`${project.title} Demo`}
+                        className="project-iframe"
+                        loading="lazy"
+                        scrolling="no"
+                      />
+                    )}
                   </div>
                   <p className="project-description">{project.description}</p>
                   <div className="project-links">
