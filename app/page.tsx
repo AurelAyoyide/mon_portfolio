@@ -1086,7 +1086,7 @@ export default function Home() {
           <section className="section fade-in" id="contact">
             <h2 className="section-title">CONTACT</h2>
             <div className="contact-container-compact">
-              <p className="contact-intro">Construisons ensemble quelque chose d'incroyable</p>
+              <p className="contact-intro">Construisons ensemble quelque chose d&apos;incroyable</p>
               <div className="contact-grid">
                 <a href="https://linkedin.com/in/aurel-ayoyide-864863396" target="_blank" rel="noopener noreferrer" className="contact-card">
                   <FontAwesomeIcon icon={faLinkedin} />
